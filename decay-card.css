@@ -1,0 +1,51 @@
+.about-answer {
+  isolation: isolate;
+  overflow: visible;
+}
+
+.about-answer-decay {
+  position: absolute;
+  z-index: 0;
+  top: -12%;
+  left: -12%;
+  display: block;
+  width: 124%;
+  height: 124%;
+  opacity: .98;
+  filter: saturate(.9) brightness(1.03);
+  pointer-events: none;
+  transform-origin: 50% 50%;
+  will-change: transform;
+}
+
+.about-answer::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    radial-gradient(circle at 18% 12%, rgba(136, 235, 255, .13), transparent 35%),
+    linear-gradient(145deg, rgba(255, 255, 255, .08), rgba(255, 247, 251, .28));
+  pointer-events: none;
+}
+
+.about-answer.is-decay-fallback {
+  background: linear-gradient(145deg, #fffaf4, #f8f0fb 55%, #eef7fb);
+}
+
+.about-answer > p,
+.about-answer > h2 {
+  position: relative;
+  z-index: 2;
+}
+
+.about-answer > span {
+  z-index: 2;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-answer-decay {
+    transform: none !important;
+  }
+}

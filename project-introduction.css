@@ -1,0 +1,116 @@
+:root {
+  --project-description-font: "LXGW WenKai", "Noto Serif SC", "Songti SC", serif;
+  --project-description-size: clamp(20px, 1.5vw, 28px);
+  --project-description-weight: 400;
+  --project-description-leading: 1.82;
+  --project-description-tracking: .03em;
+  --project-description-color: rgba(238, 235, 248, .88);
+}
+
+#projectForm .form-wide {
+  grid-column: 1 / -1;
+}
+
+.project-completion-date {
+  display: flex;
+  align-items: center;
+  gap: .65rem;
+  width: max-content;
+  margin-top: 1.15rem;
+  color: rgba(216, 205, 255, .72);
+  font-size: clamp(.68rem, .8vw, .78rem);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: .16em;
+}
+
+.project-completion-date::before {
+  content: '';
+  width: 1.8rem;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(255, 180, 229, .85), rgba(148, 215, 255, .35));
+}
+
+.project-completion-date[hidden] {
+  display: none;
+}
+
+.project-description {
+  max-width: 16em;
+  margin: clamp(1.25rem, 3vh, 2.25rem) 0 2rem;
+  color: var(--project-description-color);
+  font-family: var(--project-description-font);
+  font-size: var(--project-description-size);
+  font-weight: var(--project-description-weight);
+  font-synthesis: none;
+  line-height: var(--project-description-leading);
+  letter-spacing: var(--project-description-tracking);
+  text-wrap: pretty;
+  white-space: pre-wrap;
+  -webkit-font-smoothing: antialiased;
+}
+
+.modal.show .project-description {
+  animation: project-description-in 760ms cubic-bezier(.22, 1, .36, 1) both;
+}
+
+@keyframes project-description-in {
+  from {
+    opacity: 0;
+    filter: blur(3px);
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+  }
+}
+
+.card-character-art {
+  display: flex;
+  flex: 0 1 auto;
+  align-items: flex-end;
+  justify-content: center;
+  width: 100%;
+  height: clamp(140px, 22vh, 220px);
+  min-height: 120px;
+  margin: .25rem 0 .75rem;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.card-character-art img {
+  display: block;
+  width: 112%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center bottom;
+  transform: translateX(-7%);
+}
+
+@media (max-width: 850px) {
+  .project-description {
+    max-width: none;
+    margin-top: 1.25rem;
+    font-size: clamp(18px, 5.4vw, 23px);
+    line-height: 1.76;
+  }
+
+  .project-completion-date {
+    margin-top: .9rem;
+    font-size: .68rem;
+  }
+
+  .card-character-art {
+    height: clamp(150px, 30vh, 230px);
+    margin-top: .5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modal.show .project-description {
+    animation: none;
+  }
+}

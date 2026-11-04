@@ -1,0 +1,13 @@
+/* Enabled only after the canvas is ready and a mouse enters the page. */
+.star-cursor-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2147483647;
+}
+#cursor { display: none; }
+html:not(.star-cursor-active) * { cursor: auto; }
+html.star-cursor-active,
+html.star-cursor-active * { cursor: none !important; }

@@ -1,0 +1,99 @@
+/* Native HTML/CSS/JS adaptation of React Bits Stack. */
+.image-stack {
+  position: absolute;
+  z-index: 3;
+  left: 48vw;
+  top: 22vh;
+  width: min(720px, 44vw);
+  height: auto;
+  aspect-ratio: 16 / 9;
+  perspective: 600px;
+  isolation: isolate;
+}
+
+.stack-card-rotate {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+  touch-action: none;
+  transform-style: preserve-3d;
+  will-change: transform;
+  outline: none;
+}
+
+.stack-card-rotate.is-top:hover .stack-card,
+.stack-card-rotate.is-top:focus-visible .stack-card {
+  box-shadow: 0 32px 78px #000b, 0 0 0 3px #f4b8ff7a;
+}
+
+.stack-card-rotate.is-dragging {
+  cursor: grabbing;
+}
+
+.stack-card {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border: 8px solid #fff;
+  border-radius: 16px;
+  background: #e7e1f2;
+  box-shadow: 0 25px 65px #0009;
+  transform-origin: 90% 90%;
+  will-change: transform;
+}
+
+.stack-card img {
+  display: block;
+  position: static;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  transform: none !important;
+  transition: none;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* Keep the project folder in the open lower-left area. */
+.floating-folder {
+  left: 7vw;
+  right: auto;
+  top: auto;
+  bottom: 5vh;
+}
+
+@media (max-width: 850px) {
+  .image-stack {
+    left: 10vw;
+    top: 52vh;
+    width: 80vw;
+    height: auto;
+    aspect-ratio: 16 / 9;
+  }
+
+  .stack-card {
+    border-width: 5px;
+    border-radius: 12px;
+  }
+
+  .floating-folder {
+    left: 6vw;
+    right: auto;
+    top: auto;
+    bottom: 4vh;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stack-card,
+  .stack-card-rotate {
+    transition-duration: 0.01ms !important;
+  }
+}

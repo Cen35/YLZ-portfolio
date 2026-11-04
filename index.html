@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="YLZ 独立开发者个人作品集">
+  <meta name="theme-color" content="#070618">
+  <link rel="preload" as="image" href="assets/ending-frame.png">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="fonts/bricolage-grotesque/BricolageGrotesque96pt-ExtraBold.woff2">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%23070618'/%3E%3Cpath d='M10 16h12l10 16 10-16h12L38 40v10H26V40z' fill='%23ff9bdf'/%3E%3C/svg%3E">
+  <title>YLZ — Portfolio</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="smooth-video.css">
+  <link rel="stylesheet" href="option-wheel.css">
+  <link rel="stylesheet" href="stack.css">
+  <link rel="stylesheet" href="folder-float.css">
+  <link rel="stylesheet" href="admin-media.css">
+  <link rel="stylesheet" href="border-glow.css">
+  <link rel="stylesheet" href="spotlight-card.css">
+  <link rel="stylesheet" href="grainient.css">
+  <link rel="stylesheet" href="particles.css">
+  <link rel="stylesheet" href="fonts/lxgw-wenkai/lxgwwenkai-regular.css">
+  <link rel="stylesheet" href="project-introduction.css">
+  <link rel="stylesheet" href="sling-button.css">
+  <link rel="stylesheet" href="portfolio-polish.css">
+  <link rel="stylesheet" href="star-cursor.css">
+  <link rel="stylesheet" href="project-navigation.css">
+  <link rel="stylesheet" href="decay-card.css">
+  <link rel="stylesheet" href="about.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">跳到主要内容</a>
+  <div class="cursor" id="cursor" aria-hidden="true"></div>
+  <button class="brand warp-text" id="homeButton" data-text="YLZ" aria-label="YLZ，回到开场"><span>YLZ</span><i>·</i></button>
+
+  <main id="main-content" tabindex="-1">
+    <!-- 开场：四个视觉步骤，不再有多余空白滚动 -->
+    <section class="view intro-view is-active" id="introView" aria-label="作品集开场">
+      <div class="scene scene-one is-active" data-scene="one"></div>
+      <div class="scene video-scene" data-scene="step1"><video id="step1Video" muted playsinline preload="auto" src="assets/step1.mp4"></video></div>
+      <div class="scene scene-two" data-scene="two"></div>
+      <div class="scene video-scene" data-scene="step2"><video id="step2Video" muted playsinline preload="auto" src="assets/step2.mp4"></video></div>
+      <div class="scene scene-three" data-scene="three"></div>
+      <div class="vignette"></div>
+      <div class="pointer-light" id="pointerLight"></div>
+
+      <div class="welcome" id="welcome" aria-hidden="true">
+        <p>INDEPENDENT DEVELOPER · YLZ</p>
+        <h1 class="depth-text" id="depthText" data-text="Welcome to my portfolio">Welcome to my portfolio</h1>
+        <small>SCROLL TO MOVE FORWARD</small>
+      </div>
+
+      <div class="commit-actions" id="commitActions" aria-hidden="true">
+        <div class="commit-control" data-action="back">
+          <span>SLIDE TO BACK</span><button class="commit-knob" aria-label="向右拖动返回开场">→</button>
+        </div>
+        <div class="commit-control" data-action="continue">
+          <span>SLIDE TO ABOUT ME</span><button class="commit-knob" aria-label="向左拖动进入个人简介">←</button>
+        </div>
+      </div>
+
+      <div class="stage-progress"><i id="stageProgress"></i></div>
+      <span class="stage-number" id="stageNumber">01 / 04</span>
+    </section>
+
+    <!-- 可扩展作品目录 -->
+    <section class="view directory-view" id="directoryView" aria-label="作品目录">
+      <div class="directory-media" id="greetArea" role="button" tabindex="0" aria-label="点击人物打招呼">
+        <img id="characterImage" src="assets/ending-frame.png" alt="YLZ 角色形象">
+        <img id="endingImage" src="assets/ending-frame.png" alt="" aria-hidden="true">
+        <video id="greetVideo" muted playsinline preload="auto" src="assets/greet.mp4"></video>
+      </div>
+      <div class="directory-overlay"></div>
+
+      <aside class="directory-panel">
+        <div class="option-wheel" id="optionWheel" role="listbox" tabindex="0" aria-label="项目目录"></div>
+        <div class="directory-status"><span id="directoryCount" aria-live="polite">01 / 09</span><span>滚动或拖动切换 · 点击查看</span></div>
+      </aside>
+
+      <button class="about-button" id="openAbout" type="button">ABOUT YLZ ↗</button>
+      <button class="admin-button" data-open-admin>管理作品 ↗</button>
+    </section>
+
+    <!-- 文件夹访谈式自我介绍 -->
+    <section class="view about-view" id="aboutView" aria-label="关于 YLZ">
+      <div class="about-galaxy" id="aboutGalaxy" aria-hidden="true"><canvas id="aboutGalaxyCanvas"></canvas></div>
+      <button class="about-back" id="backFromAbout" type="button">← 返回作品目录</button>
+      <button class="about-manage" id="manageAbout" type="button" data-open-admin data-admin-target="about">管理资料卡 ↗</button>
+
+      <div class="about-layout">
+        <section class="about-workspace">
+          <div class="about-folder" id="aboutFolder">
+            <div class="about-folder-stage">
+              <div class="about-folder-back" aria-hidden="true"><span>YLZ / PROFILE</span></div>
+              <div class="about-files" id="aboutFolderFiles" role="tablist" aria-label="About Me 档案">
+                <button class="about-file" id="aboutQuestionIdentity" type="button" role="tab" aria-selected="false" aria-controls="aboutAnswer" data-about-question="identity"><span>PROFILE 01</span><b data-about-question-text="identity">姓名、班级与个人简介</b></button>
+                <button class="about-file" id="aboutQuestionWork" type="button" role="tab" aria-selected="false" aria-controls="aboutAnswer" data-about-question="work"><span>PROFILE 02</span><b data-about-question-text="work">学习方向</b></button>
+                <button class="about-file" id="aboutQuestionWhy" type="button" role="tab" aria-selected="false" aria-controls="aboutAnswer" data-about-question="why"><span>PROFILE 03</span><b data-about-question-text="why">工具与技能</b></button>
+                <button class="about-file" id="aboutQuestionTraits" type="button" role="tab" aria-selected="false" aria-controls="aboutAnswer" data-about-question="traits"><span>PROFILE 04</span><b data-about-question-text="traits">个人特点</b></button>
+                <button class="about-file" id="aboutQuestionInterests" type="button" role="tab" aria-selected="false" aria-controls="aboutAnswer" data-about-question="interests"><span>PROFILE 05</span><b data-about-question-text="interests">兴趣与灵感</b></button>
+                <button class="about-file" id="aboutQuestionGoals" type="button" role="tab" aria-selected="false" aria-controls="aboutAnswer" data-about-question="goals"><span>PROFILE 06</span><b data-about-question-text="goals">成长目标</b></button>
+              </div>
+              <button class="about-folder-front" id="aboutFolderToggle" type="button" aria-expanded="false" aria-controls="aboutFolderFiles">
+                <span id="aboutFolderLabel">ABOUT ME</span><small>点击查看个人简介与能力</small>
+              </button>
+            </div>
+          </div>
+
+          <article class="about-answer is-empty" id="aboutAnswer" role="tabpanel" tabindex="0" aria-live="polite" aria-hidden="true">
+            <canvas class="about-answer-decay" id="aboutAnswerDecay" aria-hidden="true"></canvas>
+            <figure class="about-profile-photo" aria-label="YLZ 角色正脸证件照">
+              <img src="assets/about-profile-photo-light.png" alt="粉色短发猫耳小女孩的正脸证件照">
+            </figure>
+            <p class="about-answer-label" id="aboutAnswerLabel">SELECT A FILE</p>
+            <h2 id="aboutAnswerQuestion">打开文件夹，选择一份档案</h2>
+            <p id="aboutAnswerText">六份资料分别记录我的基本信息、学习方向、能力、特点、兴趣和成长目标。</p>
+            <span id="aboutAnswerIndex" aria-hidden="true">00 / 06</span>
+          </article>
+        </section>
+
+        <figure class="about-character" id="aboutCharacter">
+          <span class="about-character-glow" aria-hidden="true"></span>
+          <img class="about-character-girl" src="assets/about-character-thinking.png" alt="YLZ 的粉发猫耳角色正在思考">
+          <img class="about-character-cat" src="assets/about-cat-companion.png" alt="一只戴着青色项圈、坐在角色脚边的奶油色小猫">
+        </figure>
+      </div>
+    </section>
+
+    <!-- 所有项目共用的项目版式 -->
+    <section class="view project-view" id="projectView" aria-label="项目详情">
+      <div class="particles" id="particles" aria-hidden="true"></div>
+      <button class="back-directory" id="backDirectory">← 返回目录</button>
+      <button class="admin-button" data-open-admin>管理作品 ↗</button>
+
+      <article class="project-copy">
+        <p id="projectMeta">01 / FEATURED PROJECT</p>
+        <h2 class="gradient-text" id="projectName">TASTE OF WUZHOU</h2>
+        <h3 id="projectDescription">一个无需商家入驻、专注真实美食探索的网站。</h3>
+          <time class="project-completion-date" id="projectCompletionDate" datetime="2026-09-13">完成日期 · 2026.9.13</time>
+      </article>
+
+      <div class="image-stack" id="imageStack" aria-label="可拖动切换的项目图片"></div>
+      <nav class="project-pagination" aria-label="切换作品">
+        <button id="previousProject" type="button"><span>← 上一件</span><small></small></button>
+        <button id="nextProject" type="button"><span>下一件 →</span><small></small></button>
+      </nav>
+
+      <div class="floating-folder folder-float" id="folderFloat">
+        <div class="folder-float__items" id="folderItems" aria-hidden="true"></div>
+        <i class="folder-tab"></i><i class="folder-paper paper-a"></i><i class="folder-paper paper-b"></i>
+        <span class="folder-face"><b id="folderName">WUZHOU</b><small>PROJECT FILE / 2026</small></span>
+        <button class="folder-click-target" id="floatingFolder" type="button" aria-label="打开项目资料卡" aria-controls="folderItems" aria-expanded="false"></button>
+        <a class="folder-direct-link" id="folderDirectLink" href="https://illustrious-seahorse-315f27.netlify.app/" target="_blank" rel="noreferrer" aria-label="直接打开项目网站">↗</a>
+      </div>
+    </section>
+  </main>
+
+  <!-- 项目资料卡 -->
+  <div class="modal" id="projectModal" role="dialog" aria-modal="true" aria-label="项目资料卡" aria-hidden="true">
+    <button class="modal-close" data-close-modal aria-label="关闭">×</button>
+    <div class="project-glow-card" id="projectGlow">
+      <span class="project-edge-light" aria-hidden="true"></span>
+      <div class="project-card">
+        <div class="grainient-background" id="projectGrainient" aria-hidden="true"></div>
+        <div class="particles-background" id="projectParticles" aria-hidden="true"></div>
+        <div class="card-cover"><div class="project-image-frame" id="projectImageFrame"><span class="project-image-sweep" aria-hidden="true"></span><img id="cardCover" src="assets/wuzhou-cover.png" alt="项目封面"></div></div>
+        <div class="card-copy">
+          <p>PROJECT INTRODUCTION</p>
+          <p class="card-introduction project-description" id="cardIntroduction">这是一个无需商家入驻、专注真实美食探索的网站，以轻松直观的方式记录梧州街头值得被发现的味道。</p>
+          <div class="card-character-art" aria-hidden="true"><img src="assets/card-character.png" alt=""></div>
+          <div class="sling-project-launch">
+            <span class="sling-project-launch__label"><b>打开项目</b><small>拖动或点击发射</small></span>
+            <span class="sling-button" id="projectSling">
+              <svg class="sling-button__fx" viewBox="-40 -40 80 80" aria-hidden="true">
+                <g class="sling-button__tension" id="slingTension">
+                  <path class="sling-button__band" id="slingBand"></path>
+                  <path class="sling-button__band sling-button__band--hot" id="slingBandHot"></path>
+                </g>
+                <circle class="sling-button__well" r="35"></circle>
+                <circle class="sling-button__arc" id="slingArc" r="35" pathLength="1" stroke-dasharray="0 1"></circle>
+              </svg>
+              <span class="sling-button__move" id="slingMove">
+                <button class="sling-button__pad" id="cardUrl" type="button" aria-label="弹射并打开项目">
+                  <span class="sling-button__face"><span class="sling-button__icon" id="slingIcon">↑</span></span>
+                </button>
+              </span>
+              <span class="sling-button__sr">按回车打开项目，或拖动按钮后松开发射。</span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 本地作品管理：项目名称、介绍、链接、标签、内页图均可改 -->
+  <div class="modal" id="adminModal" role="dialog" aria-modal="true" aria-labelledby="adminTitle" aria-hidden="true">
+    <button class="modal-close" data-close-modal aria-label="关闭">×</button>
+    <section class="admin-panel">
+      <header><div><p>PRIVATE PROJECT MANAGER</p><h2 id="adminTitle">作品管理</h2></div><button id="newProject">＋ 新增作品</button></header>
+      <div class="admin-layout">
+        <div class="admin-list" id="adminList"></div>
+        <form id="projectForm">
+          <input type="hidden" id="editProjectId">
+          <label>项目名称<input id="editName" required></label>
+          <label class="form-wide">一句话介绍<textarea id="editDescription" required></textarea></label>
+          <label class="form-wide">作品简介（约 50 字）<textarea id="editIntroduction" maxlength="50" required placeholder="请输入作品简介，最多 50 个字"></textarea></label>
+          <label>项目链接<input id="editUrl" type="url" required></label>
+          <label>完成日期<input id="editCompletionDate" type="date"></label>
+          <label>标签（用英文逗号分开）<input id="editTags" placeholder="WEB, FOOD, 2026"></label>
+          <label class="media-upload">上传项目封面<input id="editCover" type="file" accept="image/*"><span class="saved-media" id="coverSaved" aria-live="polite"></span></label>
+          <label class="media-upload">上传内页展示图（可多选）<input id="editImages" type="file" accept="image/*" multiple><span class="saved-media" id="imagesSaved" aria-live="polite"></span></label>
+          <p class="upload-note">文件选择框刷新后显示“未选择文件”是浏览器的安全规则，请以下方“已保存”缩略图为准。图片会缩小后保存在当前浏览器，清除浏览器数据后会恢复默认内容。</p>
+          <div class="form-actions"><button type="button" id="deleteProject">删除项目</button><button type="submit">保存修改</button></div>
+        </form>
+      </div>
+      <section class="about-admin">
+        <header><div><p>ABOUT ME CONTENT</p><h3>个人资料卡管理</h3><small>按老师要求填写姓名、班级与个人简介、学习方向、工具与技能。</small></div></header>
+        <form id="aboutContentForm">
+          <label class="form-wide">文件夹标签<input id="editAboutTitle" maxlength="40"></label>
+          <fieldset class="about-card-editor"><legend>资料卡 01 · 基本信息</legend><label>标题<input id="editAboutQuestion1" maxlength="40"></label><label>内容<textarea id="editAboutAnswer1" maxlength="1200"></textarea></label></fieldset>
+          <fieldset class="about-card-editor"><legend>资料卡 02 · 学习方向</legend><label>标题<input id="editAboutQuestion2" maxlength="40"></label><label>内容<textarea id="editAboutAnswer2" maxlength="1200"></textarea></label></fieldset>
+          <fieldset class="about-card-editor"><legend>资料卡 03 · 工具与技能</legend><label>标题<input id="editAboutQuestion3" maxlength="40"></label><label>内容<textarea id="editAboutAnswer3" maxlength="1200"></textarea></label></fieldset>
+          <fieldset class="about-card-editor"><legend>资料卡 04 · 个人特点</legend><label>标题<input id="editAboutQuestion4" maxlength="40"></label><label>内容<textarea id="editAboutAnswer4" maxlength="1200"></textarea></label></fieldset>
+          <fieldset class="about-card-editor"><legend>资料卡 05 · 兴趣与灵感</legend><label>标题<input id="editAboutQuestion5" maxlength="40"></label><label>内容<textarea id="editAboutAnswer5" maxlength="1200"></textarea></label></fieldset>
+          <fieldset class="about-card-editor"><legend>资料卡 06 · 成长目标</legend><label>标题<input id="editAboutQuestion6" maxlength="40"></label><label>内容<textarea id="editAboutAnswer6" maxlength="1200"></textarea></label></fieldset>
+          <div class="about-form-actions"><button type="submit">保存资料卡</button></div>
+        </form>
+      </section>
+    </section>
+  </div>
+
+  <script src="project-data.js"></script>
+  <script src="supabase-config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-store.js"></script>
+  <script src="script.js"></script>
+  <script src="about.js"></script>
+  <script src="decay-card.js"></script>
+  <script type="module" src="grainient.js"></script>
+  <script defer src="particles.js"></script>
+  <script defer src="star-cursor.js"></script>
+</body>
+</html>

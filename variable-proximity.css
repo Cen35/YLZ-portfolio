@@ -1,0 +1,23 @@
+/* Pure HTML/CSS/JS port of React Bits VariableProximity. */
+.variable-proximity {
+  position: relative;
+  cursor: default;
+}
+
+.variable-proximity__char {
+  --proximity: 0;
+  display: inline-block;
+  transform: translateY(calc(var(--proximity) * -2px)) scale(calc(1 + var(--proximity) * .1));
+  transform-origin: 50% 64%;
+  color: color-mix(in srgb, #eee8ff calc(84% + var(--proximity) * 16%), #bfa9e7);
+  text-shadow: 0 0 calc(var(--proximity) * 18px) rgb(207 172 255 / calc(var(--proximity) * .58));
+  transition: transform 90ms linear, color 90ms linear, text-shadow 90ms linear;
+  will-change: transform, font-variation-settings;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .variable-proximity__char {
+    transform: none;
+    transition: none;
+  }
+}

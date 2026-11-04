@@ -1,0 +1,47 @@
+/* Keep both layers GPU-composited. Switching happens only after a decoded video frame exists. */
+.directory-media img,
+.directory-media video {
+  transition: none !important;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  will-change: opacity;
+}
+
+.directory-media img {
+  opacity: 1;
+  z-index: 1;
+}
+
+.directory-media #endingImage {
+  opacity: 0;
+}
+
+.directory-media video {
+  opacity: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.directory-media.playing img {
+  opacity: 0;
+}
+
+.directory-media.ended #characterImage {
+  opacity: 0;
+}
+
+.directory-media.ended #endingImage {
+  opacity: 1;
+}
+
+.directory-media.playing #endingImage {
+  opacity: 0;
+}
+
+.directory-media.playing video {
+  opacity: 1;
+}
+
+.directory-media .click-character {
+  z-index: 3;
+}

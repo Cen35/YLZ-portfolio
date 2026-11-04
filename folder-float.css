@@ -1,0 +1,175 @@
+/* Native HTML/CSS/JS adaptation of React Bits FolderFloat. */
+.folder-float {
+  --ff-open: 520ms;
+  --ff-close: 312ms;
+  --ff-stagger: 45ms;
+  --ff-n: 3;
+  --ff-spring: cubic-bezier(.34, 1.57, .64, 1);
+  --ff-ease-out: cubic-bezier(.23, 1, .32, 1);
+  overflow: visible;
+  transform-style: preserve-3d;
+}
+
+.folder-click-target {
+  position: absolute;
+  z-index: 10;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: 8px 18px 22px 22px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.folder-click-target:focus-visible {
+  outline: 3px solid #f5b9ff;
+  outline-offset: 5px;
+}
+
+.folder-direct-link {
+  position: absolute;
+  z-index: 31;
+  right: 1.3rem;
+  bottom: 1.1rem;
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  color: #281a3d;
+  font-size: 1.3rem;
+  text-decoration: none;
+  transition: transform .25s ease, background .25s ease;
+}
+
+.folder-direct-link:hover,
+.folder-direct-link:focus-visible {
+  background: #ffffff70;
+  outline: none;
+  transform: translate(3px, -3px);
+}
+
+.folder-float__items {
+  position: absolute;
+  z-index: 20;
+  top: 8px;
+  left: 50%;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.folder-float[data-open] .folder-float__items {
+  pointer-events: auto;
+}
+
+.folder-float__item {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  height: 34px;
+  margin: 0;
+  padding: 0 16px;
+  border: 1px solid #ffffffa8;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #fff7ff, #d8efff);
+  color: #281a3d;
+  box-shadow: 0 8px 24px #0605168f, 0 0 18px #e99cf45c;
+  font: 600 .72rem/1 system-ui, sans-serif;
+  letter-spacing: .08em;
+  white-space: nowrap;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, 44px) scale(.6);
+  transform-origin: 50% 50%;
+  transition:
+    transform var(--ff-close) var(--ff-ease-out) calc((var(--ff-n) - 1 - var(--i)) * var(--ff-stagger) * .5),
+    opacity 160ms ease;
+}
+
+.folder-float[data-open] .folder-float__item {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(calc(-50% + var(--x)), var(--y)) rotate(var(--r)) scale(1);
+  transition:
+    transform var(--ff-open) var(--ff-spring) calc(var(--i) * var(--ff-stagger)),
+    opacity 160ms ease calc(var(--i) * var(--ff-stagger));
+}
+
+.folder-float__item:hover,
+.folder-float__item:focus-visible {
+  filter: brightness(1.06);
+  outline: 2px solid #f7b8ff;
+  outline-offset: 3px;
+}
+
+.folder-float__item[data-drag] {
+  z-index: 30;
+  cursor: grabbing;
+  transition: none !important;
+}
+
+.folder-float__item[data-pop] {
+  animation: folder-float-pop 320ms var(--ff-ease-out);
+}
+
+.folder-float__drift {
+  display: block;
+  animation: folder-float-drift 3.2s ease-in-out infinite;
+  animation-delay: calc(var(--i) * -.7s);
+  animation-play-state: paused;
+}
+
+.folder-float[data-open] .folder-float__drift {
+  animation-play-state: running;
+}
+
+.folder-float[data-open] .folder-face {
+  transform: rotateX(-34deg);
+}
+
+.folder-float[data-open] .paper-a {
+  transform: translateY(-44px) rotate(6deg);
+}
+
+.folder-float[data-open] .paper-b {
+  transform: translate(-28px, -25px) rotate(-8deg);
+}
+
+@keyframes folder-float-drift {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -3px; }
+}
+
+@keyframes folder-float-pop {
+  30% { scale: 1.1; }
+  100% { scale: 1; }
+}
+
+@media (max-width: 850px) {
+  .folder-direct-link {
+    right: .65rem;
+    bottom: .55rem;
+  }
+
+  .folder-float__item {
+    height: 30px;
+    padding: 0 12px;
+    font-size: .63rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .folder-float__item,
+  .folder-face,
+  .folder-paper {
+    transition-duration: .01ms !important;
+  }
+
+  .folder-float__drift {
+    animation: none;
+  }
+}
