@@ -55,6 +55,19 @@
     }
   };
 
+  const normalizeContent = saved => {
+    if (!saved || !Array.isArray(saved.items)) return null;
+    return {
+      schemaVersion: 2,
+      title: String(saved.title || defaults.title),
+      items: defaults.items.map((item, index) => ({
+        ...item,
+        question: String(saved.items[index]?.question || item.question),
+        answer: String(saved.items[index]?.answer || item.answer)
+      }))
+    };
+  };
+
   let content = loadContent();
   let answerTimer = 0;
   let folderVisibilityTimer = 0;
@@ -321,7 +334,7 @@
   }, { passive: true });
   character.addEventListener('pointerleave', () => { character.style.setProperty('--about-rx', '0deg'); character.style.setProperty('--about-ry', '0deg'); });
 
-  if (aboutForm) aboutForm.addEventListener('submit', event => {
+  if (aboutForm) aboutForm.addEventListener('submit', async event => {
     event.preventDefault();
     content = {
       schemaVersion: 2,
@@ -334,7 +347,23 @@
     };
     localStorage.setItem('ylz-about-content', JSON.stringify(content));
     renderContent();
-    alert('个人资料卡已保存，打开文件夹即可查看。');
+    const submitButton = aboutForm.querySelector('button[type="submit"]');
+    const previousLabel = submitButton?.textContent;
+    if (submitButton) { submitButton.disabled = true; submitButton.textContent = '正在保存…'; }
+    try {
+      if (window.YLZCloudStore?.enabled) {
+        const session = await window.YLZCloudStore.ensureAdminSession();
+        if (!session) throw new Error('管理员登录未完成');
+        await window.YLZCloudStore.saveAboutContent(content);
+        alert('个人资料卡已保存到云端，所有设备都会显示这份内容。');
+      } else {
+        alert('个人资料卡已保存在当前浏览器。Supabase 尚未连接，暂时无法同步到其他设备。');
+      }
+    } catch (error) {
+      alert(`云端保存失败：${error.message}\n内容已暂存在当前浏览器，请确认已运行最新的 Supabase 设置脚本。`);
+    } finally {
+      if (submitButton) { submitButton.disabled = false; submitButton.textContent = previousLabel; }
+    }
   });
 
   openButton.addEventListener('click', enterAbout);
@@ -343,4 +372,16 @@
     if (event.key === 'Escape' && aboutView.classList.contains('is-active')) leaveAbout();
   });
   renderContent();
+  (async () => {
+    if (!window.YLZCloudStore?.enabled) return;
+    try {
+      const remote = normalizeContent(await window.YLZCloudStore.loadAboutContent());
+      if (!remote) return;
+      content = remote;
+      localStorage.setItem('ylz-about-content', JSON.stringify(content));
+      renderContent();
+    } catch (error) {
+      console.warn('个人资料卡云端读取失败，继续使用本地内容。', error);
+    }
+  })();
 })();

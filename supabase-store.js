@@ -70,6 +70,17 @@
     if(stale.length){const {error:deleteError}=await client.from(table).delete().in('id',stale);if(deleteError)throw deleteError}
     return true;
   }
+  async function loadAboutContent(){
+    const {data,error}=await client.from('ylz_portfolio_about').select('content').eq('id','main').maybeSingle();
+    if(error)throw error;
+    return data?.content||null;
+  }
+  async function saveAboutContent(content){
+    if(!await currentSession())return false;
+    const {error}=await client.from('ylz_portfolio_about').upsert({id:'main',content,updated_at:new Date().toISOString()},{onConflict:'id'});
+    if(error)throw error;
+    return true;
+  }
   async function uploadImage(file,projectId,slot){
     if(!await currentSession())throw new Error('管理员尚未登录');
     const extension=(file.name.split('.').pop()||'jpg').toLowerCase().replace(/[^a-z0-9]/g,'')||'jpg';
@@ -79,5 +90,5 @@
     const {data}=client.storage.from(bucket).getPublicUrl(path);
     return data.publicUrl;
   }
-  window.YLZCloudStore={enabled:true,client,ensureAdminSession,loadProjects,saveProjects,uploadImage};
+  window.YLZCloudStore={enabled:true,client,ensureAdminSession,loadProjects,saveProjects,loadAboutContent,saveAboutContent,uploadImage};
 })();
