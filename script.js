@@ -6,7 +6,7 @@ const defaults=structuredClone(window.YLZ_DEFAULT_PROJECTS||[{id:'wuzhou',name:'
 const retiredProjectIds=new Set();
 let projects=loadProjects();
 
-function normalizeProject(project){const bundled=defaults.find(item=>item.id===project.id);return {...project,introduction:project.introduction??(project.id==='wuzhou'?defaults[0].introduction:project.description||''),completionDate:project.completionDate??bundled?.completionDate??'',tags:Array.isArray(project.tags)?project.tags:[],images:Array.isArray(project.images)?project.images:[],imageNames:Array.isArray(project.imageNames)?project.imageNames:[]}}
+function normalizeProject(project){const bundled=defaults.find(item=>item.id===project.id);return {...project,introduction:project.introduction??(project.id==='wuzhou'?defaults[0].introduction:project.description||''),completionDate:project.completionDate??bundled?.completionDate??'',tags:Array.isArray(project.tags)?project.tags:[],images:Array.isArray(project.images)?project.images:[],imageNames:Array.isArray(project.imageNames)?project.imageNames:[],caseStudy:Array.isArray(project.caseStudy)?project.caseStudy:(Array.isArray(bundled?.caseStudy)?structuredClone(bundled.caseStudy):[])}}
 function mergeProjectSets(saved=[]){const merged=structuredClone(defaults);saved.forEach(project=>{if(retiredProjectIds.has(project.id))return;const index=merged.findIndex(item=>item.id===project.id);if(index>=0)merged[index]=project;else merged.push(project)});return merged.map(normalizeProject)}
 function loadProjects(){try{return mergeProjectSets(JSON.parse(localStorage.getItem('ylz-projects'))||[])}catch{return mergeProjectSets()}}
 function persistProjectsLocal(){localStorage.setItem('ylz-projects',JSON.stringify(projects))}
@@ -388,12 +388,60 @@ function renderFolderTags(tags=[]){
 
 function formatCompletionDate(value=''){const match=/^(\d{4})-(\d{2})-(\d{2})$/.exec(value);return match?`${Number(match[1])}.${Number(match[2])}.${Number(match[3])}`:value}
 function renderCompletionDate(project){const date=$('#projectCompletionDate'),value=project.completionDate||'';date.hidden=!value;date.dateTime=value;date.textContent=value?`完成日期 · ${formatCompletionDate(value)}`:''}
+const caseStudyLabels=['项目成果','问题与方案','过程证据','迭代记录','学习复盘'];
+function createCaseStudyButton(entry,index,onSelect){
+  const button=document.createElement('button');
+  button.type='button';
+  button.className='case-study-index__item';
+  button.innerHTML=`<span>${String(index+1).padStart(2,'0')}</span><strong></strong><small></small><i aria-hidden="true">↗</i>`;
+  button.querySelector('strong').textContent=entry?.label||caseStudyLabels[index];
+  button.querySelector('small').textContent=entry?.title||'该项目资料待补充';
+  button.onclick=()=>onSelect(index);
+  return button;
+}
+function renderProjectCaseStudy(project,activeIndex=null){
+  const root=$('#projectCaseStudy');
+  const entries=Array.isArray(project.caseStudy)?project.caseStudy:[];
+  root.innerHTML='';
+  if(activeIndex===null){
+    const header=document.createElement('header');
+    header.className='case-study-index__header';
+    header.innerHTML='<p>PROJECT RECORD</p><h2>项目创作记录</h2><span>选择一项查看完整记录</span>';
+    const list=document.createElement('div');
+    list.className='case-study-index__list';
+    caseStudyLabels.forEach((label,index)=>list.appendChild(createCaseStudyButton(entries[index]||{label},index,next=>renderProjectCaseStudy(project,next))));
+    root.append(header,list);
+    return;
+  }
+  const entry=entries[activeIndex];
+  const detail=document.createElement('article');
+  detail.className='case-study-detail';
+  const back=document.createElement('button');
+  back.type='button';
+  back.className='case-study-detail__back';
+  back.textContent='← 全部记录';
+  back.onclick=()=>renderProjectCaseStudy(project);
+  const code=document.createElement('p');
+  code.className='case-study-detail__code';
+  code.textContent=entry?.code||`RECORD ${String(activeIndex+1).padStart(2,'0')}`;
+  const title=document.createElement('h2');
+  title.textContent=entry?.title||caseStudyLabels[activeIndex];
+  const summary=document.createElement('p');
+  summary.className='case-study-detail__summary';
+  summary.textContent=entry?.summary||'该项目的这部分资料正在整理，后续会根据项目文档补充。';
+  const points=document.createElement('ul');
+  (entry?.points||['等待补充项目成果、过程证据与复盘内容。']).forEach(text=>{const item=document.createElement('li');item.textContent=text;points.appendChild(item)});
+  const note=document.createElement('footer');
+  note.textContent=entry?.note||'PROJECT FILE · CONTENT PENDING';
+  detail.append(back,code,title,summary,points,note);
+  root.appendChild(detail);
+}
 let projectEntranceTimer=0;
 function updateDirectoryCount(){const node=$('#directoryCount');const value=`${String(selectedIndex+1).padStart(2,'0')} / ${String(projects.length).padStart(2,'0')}`;if(node.textContent===value)return;node.textContent=value;if(!matchMedia('(prefers-reduced-motion: reduce)').matches){node.getAnimations().forEach(a=>a.cancel());node.animate([{opacity:.4,transform:'translateY(5px)'},{opacity:1,transform:'translateY(0)'}],{duration:180,easing:'ease-out'})}}
 function updateProjectPagination(){[['#previousProject',-1],['#nextProject',1]].forEach(([selector,step])=>{const button=$(selector);const index=(selectedIndex+step+projects.length)%projects.length;button.disabled=projects.length<2;button.querySelector('small').textContent=projects[index]?.name||'';button.setAttribute('aria-label',`${step<0?'上一件':'下一件'}：${projects[index]?.name||''}`);button.onclick=()=>{if(projects.length>1){stackDrag=null;openProject((selectedIndex+step+projects.length)%projects.length);updateProjectPagination()}}})}
 new MutationObserver(updateProjectPagination).observe($('#projectName'),{childList:true});
 function runProjectEntrance(){const title=$('#projectName');title.classList.toggle('project-title-cn',/[\u3400-\u9fff]/.test(title.textContent));title.style.setProperty('--title-length',String(Math.max(1,Array.from(title.textContent).length)));const view=views.project;view.classList.remove('is-entering');void view.offsetWidth;view.classList.add('is-entering');clearTimeout(projectEntranceTimer);projectEntranceTimer=setTimeout(()=>view.classList.remove('is-entering'),650)}
-function openProject(index){selectedIndex=index;const p=projects[index],projectName=$('#projectName');$('#projectMeta').textContent=`${String(index+1).padStart(2,'0')} / FEATURED PROJECT`;projectName.textContent=p.name;projectName.classList.toggle('project-name-single-line',p.name==='民族乐器科普');$('#projectDescription').textContent=p.description;renderCompletionDate(p);$('#folderName').textContent=p.name.split(' ').slice(-1)[0];renderFolderTags(p.tags||[]);const images=p.images?.length?p.images:[p.cover];renderImageStack(images,p.name);$('#cardCover').src=p.cover||images[0];$('#cardIntroduction').textContent=p.introduction||p.description;$('#cardUrl').dataset.url=p.url;$('#folderDirectLink').href=p.url;showView('project');runProjectEntrance()}
+function openProject(index){selectedIndex=index;const p=projects[index],projectName=$('#projectName');$('#projectMeta').textContent=`${String(index+1).padStart(2,'0')} / FEATURED PROJECT`;projectName.textContent=p.name;projectName.classList.toggle('project-name-single-line',p.name==='民族乐器科普');$('#projectDescription').textContent=p.description;renderCompletionDate(p);$('#folderName').textContent=p.name.split(' ').slice(-1)[0];renderFolderTags(p.tags||[]);const images=p.images?.length?p.images:[p.cover];renderImageStack(images,p.name);renderProjectCaseStudy(p);$('#cardIntroduction').textContent=p.introduction||p.description;$('#cardUrl').dataset.url=p.url;$('#folderDirectLink').href=p.url;showView('project');runProjectEntrance()}
 $('#backDirectory').onclick=()=>{renderDirectory();showView('directory')};$('#homeButton').onclick=()=>{showView('intro');updateStage(0)};
 
 // Particles and folder card.
@@ -480,50 +528,6 @@ projectGlow.addEventListener('pointermove',event=>{
   projectGlow.style.setProperty('--cursor-angle',`${angle.toFixed(3)}deg`);
   });
 });
-
-// Project image: subtle spotlight, tilt and one-time viewport reveal without rerenders.
-const projectImageFrame=$('#projectImageFrame');
-const projectImagePointer=window.matchMedia('(hover: hover) and (pointer: fine)');
-const projectImageMotion=window.matchMedia('(prefers-reduced-motion: reduce)');
-const projectImageTilt={x:3,y:4};
-let projectImageRaf=0;
-let imagePointer=null;
-
-projectImageFrame.addEventListener('pointermove',event=>{
-  if(!projectImagePointer.matches||projectImageMotion.matches)return;
-  imagePointer={x:event.clientX,y:event.clientY};
-  if(projectImageRaf)return;
-  projectImageRaf=requestAnimationFrame(()=>{
-    projectImageRaf=0;
-    const rect=projectImageFrame.getBoundingClientRect();
-    const x=imagePointer.x-rect.left,y=imagePointer.y-rect.top;
-    const nx=clamp(x/rect.width,0,1),ny=clamp(y/rect.height,0,1);
-    projectImageFrame.style.setProperty('--mouse-x',`${x.toFixed(1)}px`);
-    projectImageFrame.style.setProperty('--mouse-y',`${y.toFixed(1)}px`);
-    projectImageFrame.style.setProperty('--tilt-x',`${((.5-ny)*projectImageTilt.x*2).toFixed(2)}deg`);
-    projectImageFrame.style.setProperty('--tilt-y',`${((nx-.5)*projectImageTilt.y*2).toFixed(2)}deg`);
-  });
-});
-
-projectImageFrame.addEventListener('pointerleave',()=>{
-  cancelAnimationFrame(projectImageRaf);
-  projectImageRaf=0;
-  projectImageFrame.style.setProperty('--mouse-x','50%');
-  projectImageFrame.style.setProperty('--mouse-y','50%');
-  projectImageFrame.style.setProperty('--tilt-x','0deg');
-  projectImageFrame.style.setProperty('--tilt-y','0deg');
-});
-
-if('IntersectionObserver'in window&&!projectImageMotion.matches){
-  const projectImageObserver=new IntersectionObserver(entries=>{
-    entries.forEach(entry=>{
-      if(!entry.isIntersecting)return;
-      entry.target.classList.add('is-visible');
-      projectImageObserver.unobserve(entry.target);
-    });
-  },{threshold:.18});
-  projectImageObserver.observe(projectImageFrame);
-}else projectImageFrame.classList.add('is-visible');
 
 // React Bits SlingButton, adapted to plain JavaScript for the project link.
 const slingRoot=$('#projectSling'),slingPad=$('#cardUrl'),slingMove=$('#slingMove'),slingTension=$('#slingTension');
@@ -779,3 +783,4 @@ function resizeImage(file){return new Promise((resolve,reject)=>{const reader=ne
 function escapeHtml(value=''){return value.replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
 
 renderDirectory();updateStage(0);initializeCloudProjects();
+
