@@ -81,7 +81,7 @@
       <button class="admin-button" data-open-admin>管理作品 ↗</button>
     </section>
 
-    <!-- 文件夹访谈式自我介绍 -->
+    <!-- 两页翻阅式自我介绍 -->
     <section class="view about-view" id="aboutView" aria-label="关于 YLZ">
       <div class="about-galaxy" id="aboutGalaxy" aria-hidden="true"><canvas id="aboutGalaxyCanvas"></canvas></div>
       <button class="about-back" id="backFromAbout" type="button">← 返回作品目录</button>
@@ -89,33 +89,30 @@
 
       <div class="about-layout">
         <section class="about-workspace">
-          <div class="about-folder" id="aboutFolder">
-            <div class="about-folder-stage">
-              <div class="about-folder-back" aria-hidden="true"><span>YLZ / PROFILE</span></div>
-              <div class="about-files" id="aboutFolderFiles" role="tablist" aria-label="About Me 档案">
-                <button class="about-file" id="aboutQuestionIdentity" type="button" role="tab" aria-selected="false" aria-controls="aboutAnswer" data-about-question="identity"><span>PROFILE 01</span><b data-about-question-text="identity">姓名、班级与个人简介</b></button>
-                <button class="about-file" id="aboutQuestionWork" type="button" role="tab" aria-selected="false" aria-controls="aboutAnswer" data-about-question="work"><span>PROFILE 02</span><b data-about-question-text="work">学习方向</b></button>
-                <button class="about-file" id="aboutQuestionWhy" type="button" role="tab" aria-selected="false" aria-controls="aboutAnswer" data-about-question="why"><span>PROFILE 03</span><b data-about-question-text="why">工具与技能</b></button>
-                <button class="about-file" id="aboutQuestionTraits" type="button" role="tab" aria-selected="false" aria-controls="aboutAnswer" data-about-question="traits"><span>PROFILE 04</span><b data-about-question-text="traits">个人特点</b></button>
-                <button class="about-file" id="aboutQuestionInterests" type="button" role="tab" aria-selected="false" aria-controls="aboutAnswer" data-about-question="interests"><span>PROFILE 05</span><b data-about-question-text="interests">兴趣与灵感</b></button>
-                <button class="about-file" id="aboutQuestionGoals" type="button" role="tab" aria-selected="false" aria-controls="aboutAnswer" data-about-question="goals"><span>PROFILE 06</span><b data-about-question-text="goals">成长目标</b></button>
-              </div>
-              <button class="about-folder-front" id="aboutFolderToggle" type="button" aria-expanded="false" aria-controls="aboutFolderFiles">
-                <span id="aboutFolderLabel">ABOUT ME</span><small>点击查看个人简介与能力</small>
-              </button>
-            </div>
+          <div class="about-book" id="aboutBook" aria-label="个人简介，两页" aria-live="polite">
+            <canvas class="about-page-particles" id="aboutPageParticles" aria-hidden="true"></canvas>
+            <article class="about-sheet about-sheet-one" id="aboutSheetOne" aria-hidden="false">
+              <canvas class="about-answer-decay" data-about-decay aria-hidden="true"></canvas>
+              <header class="about-sheet-header">
+                <div><p data-about-page-title>ABOUT ME</p><h2>个人简介与能力</h2></div>
+                <span>01 / 02</span>
+              </header>
+              <figure class="about-profile-photo" aria-label="YLZ 角色正脸证件照">
+                <img src="assets/about-profile-photo-light.png" alt="粉色短发猫耳小女孩的正脸证件照">
+              </figure>
+              <div class="about-sheet-content about-sheet-content-one" id="aboutPageOneContent"></div>
+              <button class="about-page-turn about-page-next" id="aboutNextPage" type="button" aria-controls="aboutSheetTwo">下一页 <span aria-hidden="true">→</span></button>
+            </article>
+            <article class="about-sheet about-sheet-two" id="aboutSheetTwo" aria-hidden="true">
+              <canvas class="about-answer-decay" data-about-decay aria-hidden="true"></canvas>
+              <header class="about-sheet-header">
+                <div><p data-about-page-title>ABOUT ME</p><h2>特点、灵感与目标</h2></div>
+                <span>02 / 02</span>
+              </header>
+              <div class="about-sheet-content" id="aboutPageTwoContent"></div>
+              <button class="about-page-turn about-page-prev" id="aboutPreviousPage" type="button" aria-controls="aboutSheetOne"><span aria-hidden="true">←</span> 返回第一页</button>
+            </article>
           </div>
-
-          <article class="about-answer is-empty" id="aboutAnswer" role="tabpanel" tabindex="0" aria-live="polite" aria-hidden="true">
-            <canvas class="about-answer-decay" id="aboutAnswerDecay" aria-hidden="true"></canvas>
-            <figure class="about-profile-photo" aria-label="YLZ 角色正脸证件照">
-              <img src="assets/about-profile-photo-light.png" alt="粉色短发猫耳小女孩的正脸证件照">
-            </figure>
-            <p class="about-answer-label" id="aboutAnswerLabel">SELECT A FILE</p>
-            <h2 id="aboutAnswerQuestion">打开文件夹，选择一份档案</h2>
-            <p id="aboutAnswerText">六份资料分别记录我的基本信息、学习方向、能力、特点、兴趣和成长目标。</p>
-            <span id="aboutAnswerIndex" aria-hidden="true">00 / 06</span>
-          </article>
         </section>
 
         <figure class="about-character" id="aboutCharacter">
@@ -216,6 +213,7 @@
       <section class="about-admin">
         <header><div><p>ABOUT ME CONTENT</p><h3>个人资料卡管理</h3><small>按老师要求填写姓名、班级与个人简介、学习方向、工具与技能。</small></div></header>
         <form id="aboutContentForm">
+          <p class="about-admin-map">资料卡 01–03 显示在第一页，04–06 显示在第二页。</p>
           <label class="form-wide">文件夹标签<input id="editAboutTitle" maxlength="40"></label>
           <fieldset class="about-card-editor"><legend>资料卡 01 · 基本信息</legend><label>标题<input id="editAboutQuestion1" maxlength="40"></label><label>内容<textarea id="editAboutAnswer1" maxlength="1200"></textarea></label></fieldset>
           <fieldset class="about-card-editor"><legend>资料卡 02 · 学习方向</legend><label>标题<input id="editAboutQuestion2" maxlength="40"></label><label>内容<textarea id="editAboutAnswer2" maxlength="1200"></textarea></label></fieldset>

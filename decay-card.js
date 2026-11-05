@@ -363,7 +363,9 @@ void main() {
     }
   }
 
-  const root = document.querySelector('#aboutAnswer');
-  const canvas = document.querySelector('#aboutAnswerDecay');
-  if (root && canvas) window.YLZDecayCard = new DecayCardEffect(root, canvas);
+  const cards = [...document.querySelectorAll('.about-sheet')].map(root => {
+    const canvas = root.querySelector('[data-about-decay]');
+    return canvas ? new DecayCardEffect(root, canvas) : null;
+  }).filter(Boolean);
+  window.YLZDecayCards = cards;
 })();

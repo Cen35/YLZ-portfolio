@@ -1,4 +1,5 @@
-.about-answer {
+.about-answer,
+.about-sheet {
   isolation: isolate;
   overflow: visible;
 }
@@ -18,7 +19,8 @@
   will-change: transform;
 }
 
-.about-answer::after {
+.about-answer::after,
+.about-sheet::after {
   content: "";
   position: absolute;
   z-index: 1;
@@ -30,7 +32,8 @@
   pointer-events: none;
 }
 
-.about-answer.is-decay-fallback {
+.about-answer.is-decay-fallback,
+.about-sheet.is-decay-fallback {
   background: linear-gradient(145deg, #fffaf4, #f8f0fb 55%, #eef7fb);
 }
 
