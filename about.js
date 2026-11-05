@@ -21,7 +21,7 @@
       { key: 'why', question: '工具与技能', answer: '请在“管理资料卡”中填写你使用的设计工具、开发技术，以及最能体现个人能力的技能。' },
       { key: 'traits', question: '个人特点', answer: '请在“管理资料卡”中填写你的性格特点、做事方式，以及你希望别人如何认识你。' },
       { key: 'interests', question: '兴趣与灵感', answer: '请在“管理资料卡”中填写你的兴趣爱好，以及日常创作灵感通常来自哪里。' },
-      { key: 'goals', question: '成长目标', answer: '请在“管理资料卡”中填写你接下来希望学习、尝试或完成的目标。' }
+      { key: 'goals', question: '联系方式', answer: '请在“管理资料卡”中填写个人邮箱、电话或其他希望展示的联系方式。' }
     ]
   };
   const cloneDefaults = () => JSON.parse(JSON.stringify(defaults));
