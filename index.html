@@ -81,36 +81,46 @@
       <button class="admin-button" data-open-admin>管理作品 ↗</button>
     </section>
 
-    <!-- 两页翻阅式自我介绍 -->
+    <!-- 三页粒子切换式自我介绍 -->
     <section class="view about-view" id="aboutView" aria-label="关于 YLZ">
       <div class="about-galaxy" id="aboutGalaxy" aria-hidden="true"><canvas id="aboutGalaxyCanvas"></canvas></div>
-      <button class="about-back" id="backFromAbout" type="button">← 返回作品目录</button>
+      <button class="about-back" id="backFromAbout" type="button">返回作品目录 ↙</button>
       <button class="about-manage" id="manageAbout" type="button" data-open-admin data-admin-target="about">管理资料卡 ↗</button>
 
       <div class="about-layout">
         <section class="about-workspace">
-          <div class="about-book" id="aboutBook" aria-label="个人简介，两页" aria-live="polite">
+          <div class="about-book" id="aboutBook" aria-label="个人简介，三页" aria-live="polite">
             <canvas class="about-page-particles" id="aboutPageParticles" aria-hidden="true"></canvas>
             <article class="about-sheet about-sheet-one" id="aboutSheetOne" aria-hidden="false">
               <canvas class="about-answer-decay" data-about-decay aria-hidden="true"></canvas>
               <header class="about-sheet-header">
-                <div><p data-about-page-title>ABOUT ME</p><h2>个人简介与能力</h2></div>
-                <span>01 / 02</span>
+                <div><p data-about-page-title>ABOUT ME</p><h2>个人简介与学习</h2></div>
+                <span>01 / 03</span>
               </header>
               <figure class="about-profile-photo" aria-label="YLZ 角色正脸证件照">
                 <img src="assets/about-profile-photo-light.png" alt="粉色短发猫耳小女孩的正脸证件照">
               </figure>
               <div class="about-sheet-content about-sheet-content-one" id="aboutPageOneContent"></div>
-              <button class="about-page-turn about-page-next" id="aboutNextPage" type="button" aria-controls="aboutSheetTwo">下一页 <span aria-hidden="true">→</span></button>
+              <button class="about-page-turn about-page-next" id="aboutNextPage1" type="button" aria-controls="aboutSheetTwo">下一页 <span aria-hidden="true">→</span></button>
             </article>
             <article class="about-sheet about-sheet-two" id="aboutSheetTwo" aria-hidden="true">
               <canvas class="about-answer-decay" data-about-decay aria-hidden="true"></canvas>
               <header class="about-sheet-header">
-                <div><p data-about-page-title>ABOUT ME</p><h2>特点、灵感与目标</h2></div>
-                <span>02 / 02</span>
+                <div><p data-about-page-title>ABOUT ME</p><h2>能力与个人特点</h2></div>
+                <span>02 / 03</span>
               </header>
               <div class="about-sheet-content" id="aboutPageTwoContent"></div>
-              <button class="about-page-turn about-page-prev" id="aboutPreviousPage" type="button" aria-controls="aboutSheetOne"><span aria-hidden="true">←</span> 返回第一页</button>
+              <button class="about-page-turn about-page-prev" id="aboutPreviousPage2" type="button" aria-controls="aboutSheetOne"><span aria-hidden="true">←</span> 上一页</button>
+              <button class="about-page-turn about-page-next" id="aboutNextPage2" type="button" aria-controls="aboutSheetThree">下一页 <span aria-hidden="true">→</span></button>
+            </article>
+            <article class="about-sheet about-sheet-three" id="aboutSheetThree" aria-hidden="true">
+              <canvas class="about-answer-decay" data-about-decay aria-hidden="true"></canvas>
+              <header class="about-sheet-header">
+                <div><p data-about-page-title>ABOUT ME</p><h2>兴趣与成长目标</h2></div>
+                <span>03 / 03</span>
+              </header>
+              <div class="about-sheet-content" id="aboutPageThreeContent"></div>
+              <button class="about-page-turn about-page-prev" id="aboutPreviousPage3" type="button" aria-controls="aboutSheetTwo"><span aria-hidden="true">←</span> 上一页</button>
             </article>
           </div>
         </section>
@@ -213,8 +223,8 @@
       <section class="about-admin">
         <header><div><p>ABOUT ME CONTENT</p><h3>个人资料卡管理</h3><small>按老师要求填写姓名、班级与个人简介、学习方向、工具与技能。</small></div></header>
         <form id="aboutContentForm">
-          <p class="about-admin-map">资料卡 01–03 显示在第一页，04–06 显示在第二页。</p>
-          <label class="form-wide">文件夹标签<input id="editAboutTitle" maxlength="40"></label>
+          <p class="about-admin-map">资料卡 01–02 显示在第一页，03–04 显示在第二页，05–06 显示在第三页。</p>
+          <label class="form-wide">页面英文标签<input id="editAboutTitle" maxlength="40"></label>
           <fieldset class="about-card-editor"><legend>资料卡 01 · 基本信息</legend><label>标题<input id="editAboutQuestion1" maxlength="40"></label><label>内容<textarea id="editAboutAnswer1" maxlength="1200"></textarea></label></fieldset>
           <fieldset class="about-card-editor"><legend>资料卡 02 · 学习方向</legend><label>标题<input id="editAboutQuestion2" maxlength="40"></label><label>内容<textarea id="editAboutAnswer2" maxlength="1200"></textarea></label></fieldset>
           <fieldset class="about-card-editor"><legend>资料卡 03 · 工具与技能</legend><label>标题<input id="editAboutQuestion3" maxlength="40"></label><label>内容<textarea id="editAboutAnswer3" maxlength="1200"></textarea></label></fieldset>

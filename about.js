@@ -5,10 +5,10 @@
   const character = document.querySelector('#aboutCharacter');
   const aboutForm = document.querySelector('#aboutContentForm');
   const book = document.querySelector('#aboutBook');
-  const sheets = [document.querySelector('#aboutSheetOne'), document.querySelector('#aboutSheetTwo')];
-  const pageContents = [document.querySelector('#aboutPageOneContent'), document.querySelector('#aboutPageTwoContent')];
-  const nextButton = document.querySelector('#aboutNextPage');
-  const previousButton = document.querySelector('#aboutPreviousPage');
+  const sheets = [document.querySelector('#aboutSheetOne'), document.querySelector('#aboutSheetTwo'), document.querySelector('#aboutSheetThree')];
+  const pageContents = [document.querySelector('#aboutPageOneContent'), document.querySelector('#aboutPageTwoContent'), document.querySelector('#aboutPageThreeContent')];
+  const nextButtons = [document.querySelector('#aboutNextPage1'), document.querySelector('#aboutNextPage2')];
+  const previousButtons = [document.querySelector('#aboutPreviousPage2'), document.querySelector('#aboutPreviousPage3')];
   const particleCanvas = document.querySelector('#aboutPageParticles');
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
   if (!aboutView || !openButton || !backButton || !character || !book || sheets.some(sheet => !sheet)) return;
@@ -61,8 +61,9 @@
   const renderContent = () => {
     pageContents.forEach(node => node.replaceChildren());
     document.querySelectorAll('[data-about-page-title]').forEach(node => { node.textContent = content.title; });
-    content.items.slice(0, 3).forEach(item => pageContents[0].append(buildProfileSection(item)));
-    content.items.slice(3, 6).forEach(item => pageContents[1].append(buildProfileSection(item)));
+    content.items.slice(0, 2).forEach(item => pageContents[0].append(buildProfileSection(item)));
+    content.items.slice(2, 4).forEach(item => pageContents[1].append(buildProfileSection(item)));
+    content.items.slice(4, 6).forEach(item => pageContents[2].append(buildProfileSection(item)));
     content.items.forEach((item, index) => {
       const questionInput = document.querySelector(`#editAboutQuestion${index + 1}`);
       const answerInput = document.querySelector(`#editAboutAnswer${index + 1}`);
@@ -126,7 +127,7 @@
 
   const pageParticles = new PageParticleTransition(particleCanvas);
   const setPage = (index, { animate = true } = {}) => {
-    if (changingPage || index === currentPage || index < 0 || index > 1) return;
+    if (changingPage || index === currentPage || index < 0 || index > 2) return;
     const from = currentPage;
     const swap = () => {
       sheets[from].classList.remove('is-visible', 'is-dispersing');
@@ -136,7 +137,8 @@
       currentPage = index;
       requestAnimationFrame(() => sheets[index].classList.remove('is-revealing'));
       changingPage = false;
-      (index ? previousButton : nextButton)?.focus({ preventScroll: true });
+      const focusTarget = index === 0 ? nextButtons[0] : (index === 2 ? previousButtons[1] : (index > from ? nextButtons[1] : previousButtons[0]));
+      focusTarget?.focus({ preventScroll: true });
       window.YLZDecayCards?.forEach(card => card.wake?.());
     };
     changingPage = true;
@@ -146,7 +148,7 @@
   const resetFirstPage = () => {
     currentPage = 0; changingPage = false;
     sheets[0].classList.add('is-visible'); sheets[0].classList.remove('is-dispersing', 'is-revealing'); sheets[0].setAttribute('aria-hidden', 'false');
-    sheets[1].classList.remove('is-visible', 'is-dispersing', 'is-revealing'); sheets[1].setAttribute('aria-hidden', 'true');
+    sheets.slice(1).forEach(sheet => { sheet.classList.remove('is-visible', 'is-dispersing', 'is-revealing'); sheet.setAttribute('aria-hidden', 'true'); });
   };
 
   class GalaxyBackground {
@@ -202,14 +204,16 @@
   const leaveAbout = () => { renderDirectory(); showView('directory'); openButton.focus({ preventScroll: true }); };
   window.YLZAbout = { enter: enterAbout, leave: leaveAbout };
 
-  nextButton?.addEventListener('click', () => setPage(1));
-  previousButton?.addEventListener('click', () => setPage(0));
+  nextButtons[0]?.addEventListener('click', () => setPage(1));
+  nextButtons[1]?.addEventListener('click', () => setPage(2));
+  previousButtons[0]?.addEventListener('click', () => setPage(0));
+  previousButtons[1]?.addEventListener('click', () => setPage(1));
   openButton.addEventListener('click', enterAbout); backButton.addEventListener('click', leaveAbout);
   window.addEventListener('keydown', event => {
     if (!aboutView.classList.contains('is-active')) return;
     if (event.key === 'Escape') leaveAbout();
-    if (event.key === 'ArrowRight') setPage(1);
-    if (event.key === 'ArrowLeft') setPage(0);
+    if (event.key === 'ArrowRight') setPage(currentPage + 1);
+    if (event.key === 'ArrowLeft') setPage(currentPage - 1);
   });
 
   character.addEventListener('pointermove', event => {
@@ -240,7 +244,7 @@
     try {
       if (window.YLZCloudStore?.enabled) {
         const session = await window.YLZCloudStore.ensureAdminSession(); if (!session) throw new Error('管理员登录未完成');
-        await window.YLZCloudStore.saveAboutContent(content); alert('两页个人资料已保存到云端。');
+        await window.YLZCloudStore.saveAboutContent(content); alert('三页个人资料已保存到云端。');
       } else alert('个人资料已保存在当前浏览器。Supabase 尚未连接。');
     } catch (error) { alert(`云端保存失败：${error.message}\n内容已暂存在当前浏览器。`); }
     finally { if (submitButton) { submitButton.disabled = false; submitButton.textContent = previousLabel; } }
