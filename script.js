@@ -6,7 +6,7 @@ const defaults=structuredClone(window.YLZ_DEFAULT_PROJECTS||[{id:'wuzhou',name:'
 const retiredProjectIds=new Set();
 let projects=loadProjects();
 
-function normalizeProject(project){const bundled=defaults.find(item=>item.id===project.id),bundledCase=Array.isArray(bundled?.caseStudy)?bundled.caseStudy:[],caseStudy=Array.isArray(project.caseStudy)&&project.caseStudy.length?project.caseStudy.map((entry,index)=>({...structuredClone(bundledCase[index]||{}),...entry,images:Array.isArray(entry.images)&&entry.images.length?entry.images:structuredClone(bundledCase[index]?.images||[])})):structuredClone(bundledCase);return {...project,introduction:project.introduction??(project.id==='wuzhou'?defaults[0].introduction:project.description||''),completionDate:project.completionDate??bundled?.completionDate??'',tags:Array.isArray(project.tags)?project.tags:[],images:Array.isArray(project.images)?project.images:[],imageNames:Array.isArray(project.imageNames)?project.imageNames:[],toolkit:Array.isArray(project.toolkit)&&project.toolkit.length?project.toolkit:(Array.isArray(bundled?.toolkit)?structuredClone(bundled.toolkit):[]),caseStudy}}
+function normalizeProject(project){const bundled=defaults.find(item=>item.id===project.id),bundledCase=Array.isArray(bundled?.caseStudy)?bundled.caseStudy:[],caseStudy=project.id==='wuzhou'?structuredClone(bundledCase):(Array.isArray(project.caseStudy)&&project.caseStudy.length?project.caseStudy.map((entry,index)=>({...structuredClone(bundledCase[index]||{}),...entry,images:Array.isArray(entry.images)&&entry.images.length?entry.images:structuredClone(bundledCase[index]?.images||[])})):structuredClone(bundledCase));return {...project,introduction:project.introduction??(project.id==='wuzhou'?defaults[0].introduction:project.description||''),completionDate:project.completionDate??bundled?.completionDate??'',tags:Array.isArray(project.tags)?project.tags:[],images:Array.isArray(project.images)?project.images:[],imageNames:Array.isArray(project.imageNames)?project.imageNames:[],toolkit:Array.isArray(project.toolkit)&&project.toolkit.length?project.toolkit:(Array.isArray(bundled?.toolkit)?structuredClone(bundled.toolkit):[]),caseStudy}}
 function mergeProjectSets(saved=[]){const merged=structuredClone(defaults);saved.forEach(project=>{if(retiredProjectIds.has(project.id))return;const index=merged.findIndex(item=>item.id===project.id);if(index>=0)merged[index]=project;else merged.push(project)});return merged.map(normalizeProject)}
 function loadProjects(){try{return mergeProjectSets(JSON.parse(localStorage.getItem('ylz-projects'))||[])}catch{return mergeProjectSets()}}
 function persistProjectsLocal(){localStorage.setItem('ylz-projects',JSON.stringify(projects))}
@@ -414,9 +414,16 @@ function createCaseStudyGallery(images=[]){
     picture.alt=image.alt||'';
     picture.loading='eager';
     picture.decoding='async';
+    const link=document.createElement('a');
+    link.className='case-study-gallery__open';
+    link.href=image.src;
+    link.target='_blank';
+    link.rel='noreferrer';
+    link.setAttribute('aria-label',`查看原图：${image.alt||'项目过程截图'}`);
+    link.appendChild(picture);
     const caption=document.createElement('figcaption');
-    caption.textContent=image.caption||'';
-    figure.append(picture,caption);
+    caption.textContent=`${image.caption||''} · 点击查看原图`;
+    figure.append(link,caption);
     gallery.appendChild(figure);
   });
   return gallery;
@@ -438,8 +445,10 @@ function renderProjectCaseStudy(project,activeIndex=null){
   }
   setCaseStudyExpanded(root,true);
   const entry=entries[activeIndex];
+  const images=Array.isArray(entry?.images)?entry.images:[];
   const detail=document.createElement('article');
   detail.className='case-study-detail';
+  detail.classList.toggle('case-study-detail--text-only',!images.length);
   const back=document.createElement('button');
   back.type='button';
   back.className='case-study-detail__back';
@@ -457,6 +466,9 @@ function renderProjectCaseStudy(project,activeIndex=null){
   const summary=document.createElement('p');
   summary.className='case-study-detail__summary';
   summary.textContent=entry?.summary||'该项目的这部分资料正在整理，后续会根据项目文档补充。';
+  const paragraphs=document.createElement('div');
+  paragraphs.className='case-study-detail__paragraphs';
+  (entry?.paragraphs||[]).forEach(text=>{const paragraph=document.createElement('p');paragraph.textContent=text;paragraphs.appendChild(paragraph)});
   const points=document.createElement('ul');
   (entry?.points||['等待补充项目成果、过程证据与复盘内容。']).forEach(text=>{const item=document.createElement('li');item.textContent=text;points.appendChild(item)});
   const toolkit=document.createElement('section');
@@ -469,10 +481,13 @@ function renderProjectCaseStudy(project,activeIndex=null){
   toolkit.append(toolkitTitle,toolkitList);
   const note=document.createElement('footer');
   note.textContent=entry?.note||'PROJECT FILE · CONTENT PENDING';
-  copy.append(code,title,summary,points);
-  if(project.toolkit?.length)copy.appendChild(toolkit);
+  copy.append(code,title,summary);
+  if(paragraphs.childElementCount)copy.appendChild(paragraphs);
+  copy.appendChild(points);
+  if(activeIndex===0&&project.toolkit?.length)copy.appendChild(toolkit);
   copy.appendChild(note);
-  layout.append(copy,createCaseStudyGallery(entry?.images||[]));
+  layout.appendChild(copy);
+  if(images.length)layout.appendChild(createCaseStudyGallery(images));
   detail.append(back,layout);
   root.appendChild(detail);
 }
@@ -823,4 +838,5 @@ function resizeImage(file){return new Promise((resolve,reject)=>{const reader=ne
 function escapeHtml(value=''){return value.replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
 
 renderDirectory();updateStage(0);initializeCloudProjects();
+
 
