@@ -399,9 +399,14 @@ function createCaseStudyButton(entry,index,onSelect){
   button.onclick=()=>onSelect(index);
   return button;
 }
+function setCaseStudyPerformanceMode(expanded){
+  document.documentElement.classList.toggle('case-study-reading',expanded);
+  document.dispatchEvent(new CustomEvent('ylz:case-study-mode',{detail:{expanded}}));
+}
 function setCaseStudyExpanded(root,expanded){
   root.closest('.project-card')?.classList.toggle('case-study-expanded',expanded);
   root.closest('.project-glow-card')?.classList.toggle('case-study-expanded-shell',expanded);
+  setCaseStudyPerformanceMode(expanded);
 }
 function createCaseStudyGallery(images=[]){
   const gallery=document.createElement('div');
@@ -566,6 +571,7 @@ folderFloat.addEventListener('click',event=>{
 const projectGlow=$('#projectGlow');
 let glowFrame=0,glowPointer=null;
 projectGlow.addEventListener('pointermove',event=>{
+  if(document.documentElement.classList.contains('case-study-reading'))return;
   glowPointer={x:event.clientX,y:event.clientY};
   if(glowFrame)return;
   glowFrame=requestAnimationFrame(()=>{
@@ -753,6 +759,7 @@ slingPad.addEventListener('keydown',event=>{if(event.key==='Escape'&&slingGrip)r
 let modalReturnFocus=null;
 function openModal(modal){
   modalReturnFocus=document.activeElement instanceof HTMLElement?document.activeElement:null;
+  document.documentElement.classList.toggle('project-modal-active',modal.id==='projectModal');
   modal.classList.add('show');
   modal.setAttribute('aria-hidden','false');
   requestAnimationFrame(()=>modal.querySelector('[data-close-modal],button,[href],input,textarea,select')?.focus());
@@ -760,6 +767,8 @@ function openModal(modal){
 function closeModals(){
   const hadOpen=$$('.modal.show').length>0;
   $$('.modal').forEach(m=>{m.classList.remove('show');m.setAttribute('aria-hidden','true')});
+  document.documentElement.classList.remove('project-modal-active');
+  setCaseStudyPerformanceMode(false);
   if(hadOpen&&modalReturnFocus?.isConnected)modalReturnFocus.focus();
   modalReturnFocus=null;
 }

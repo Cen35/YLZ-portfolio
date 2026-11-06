@@ -235,6 +235,7 @@
 .project-card.case-study-expanded {
   display: block;
   width: 100%;
+  contain: layout paint style;
 }
 
 .project-card.case-study-expanded > .card-copy {
@@ -282,6 +283,23 @@
   overflow-y: auto;
   scrollbar-color: rgba(255, 185, 230, .42) transparent;
   scrollbar-width: thin;
+  overscroll-behavior: contain;
+}
+
+/* Reading mode covers the animated card background completely. Pause the
+   hidden work and avoid recompositing a full-screen backdrop blur on scroll. */
+html.project-modal-active #projectModal {
+  background: rgba(3, 2, 15, .96);
+  backdrop-filter: none;
+}
+
+html.project-modal-active .project-view .particles i {
+  animation-play-state: paused;
+}
+
+html.case-study-reading .project-glow-card {
+  --edge-proximity: 62;
+  --cursor-angle: 45deg;
 }
 
 .case-study-detail__copy {

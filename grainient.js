@@ -135,7 +135,7 @@ if (container) {
       webgl: 2,
       alpha: true,
       antialias: false,
-      dpr: Math.min(window.devicePixelRatio || 1, 2)
+      dpr: Math.min(window.devicePixelRatio || 1, 1.25)
     });
     const gl = renderer.gl;
     const canvas = gl.canvas;
@@ -192,11 +192,17 @@ if (container) {
     let frame = 0;
     let isVisible = false;
     let isPageVisible = !document.hidden;
+    let suspended = document.documentElement.classList.contains('case-study-reading');
     const startedAt = performance.now();
+    let lastRenderAt = 0;
+    const renderInterval = 1000 / 30;
 
     const loop = time => {
-      program.uniforms.iTime.value = (time - startedAt) * 0.001;
-      renderer.render({ scene: mesh });
+      if (time - lastRenderAt >= renderInterval) {
+        program.uniforms.iTime.value = (time - startedAt) * 0.001;
+        renderer.render({ scene: mesh });
+        lastRenderAt = time;
+      }
       frame = requestAnimationFrame(loop);
     };
     const stop = () => {
@@ -210,10 +216,10 @@ if (container) {
         renderer.render({ scene: mesh });
         return;
       }
-      if (isVisible && isPageVisible && !frame) frame = requestAnimationFrame(loop);
+      if (isVisible && isPageVisible && !suspended && !frame) frame = requestAnimationFrame(loop);
     };
     const syncPlayback = () => {
-      if (isVisible && isPageVisible) start();
+      if (isVisible && isPageVisible && !suspended) start();
       else stop();
     };
 
@@ -225,6 +231,10 @@ if (container) {
 
     document.addEventListener('visibilitychange', () => {
       isPageVisible = !document.hidden;
+      syncPlayback();
+    });
+    document.addEventListener('ylz:case-study-mode', event => {
+      suspended = Boolean(event.detail?.expanded);
       syncPlayback();
     });
     reducedMotion.addEventListener?.('change', () => {

@@ -37,6 +37,7 @@
   let frame = 0;
   let visible = false;
   let pageVisible = !document.hidden;
+  let suspended = document.documentElement.classList.contains('case-study-reading');
   let lastTime = performance.now();
   let elapsed = 0;
   let pointerX = 0;
@@ -46,7 +47,7 @@
   let pendingPointer = null;
   let surfaceRect = null;
   let lastDrawTime = 0;
-  const drawInterval = 1000 / 45;
+  const drawInterval = 1000 / 30;
 
   // Render the glow once and reuse it for every particle. Rebuilding a blurred
   // shadow 200 times per frame was the largest source of pointer jank.
@@ -99,7 +100,7 @@
     const rect = container.getBoundingClientRect();
     width = Math.max(1, rect.width);
     height = Math.max(1, rect.height);
-    pixelRatio = Math.min(window.devicePixelRatio || 1, 1.5);
+    pixelRatio = Math.min(window.devicePixelRatio || 1, 1.25);
     canvas.width = Math.round(width * pixelRatio);
     canvas.height = Math.round(height * pixelRatio);
     canvas.style.width = `${width}px`;
@@ -161,13 +162,13 @@
       draw();
       return;
     }
-    if (!visible || !pageVisible || frame) return;
+    if (!visible || !pageVisible || suspended || frame) return;
     lastTime = performance.now();
     frame = requestAnimationFrame(update);
   };
 
   const syncPlayback = () => {
-    if (visible && pageVisible) start();
+    if (visible && pageVisible && !suspended) start();
     else stop();
   };
 
@@ -185,6 +186,10 @@
 
   document.addEventListener('visibilitychange', () => {
     pageVisible = !document.hidden;
+    syncPlayback();
+  });
+  document.addEventListener('ylz:case-study-mode', event => {
+    suspended = Boolean(event.detail?.expanded);
     syncPlayback();
   });
   reducedMotion.addEventListener?.('change', syncPlayback);
