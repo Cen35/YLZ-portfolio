@@ -217,3 +217,207 @@
   }
 }
 
+/* The selected record becomes the complete reading surface. */
+.project-glow-card > .project-card > .project-case-study {
+  background: #0d0b18;
+}
+
+.project-glow-card.case-study-expanded-shell {
+  width: min(1360px, 94vw);
+  max-height: 90vh;
+}
+
+.project-glow-card.case-study-expanded-shell > .project-card {
+  max-height: calc(90vh - 4px);
+  overflow: hidden;
+}
+
+.project-card.case-study-expanded {
+  display: block;
+  width: 100%;
+}
+
+.project-card.case-study-expanded > .card-copy {
+  display: none;
+}
+
+.project-card.case-study-expanded > .grainient-background,
+.project-card.case-study-expanded > .particles-background {
+  opacity: 0;
+}
+
+.project-glow-card .project-card.case-study-expanded > .project-case-study {
+  width: 100%;
+  height: calc(90vh - 4px);
+  min-height: 0;
+  padding: clamp(1.5rem, 3vw, 2.75rem);
+  overflow: hidden;
+  background: #0d0b18;
+}
+
+.project-card.case-study-expanded .project-case-study::before {
+  display: none;
+}
+
+.project-card.case-study-expanded .case-study-detail {
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  padding: 0;
+}
+
+.case-study-detail__layout {
+  display: grid;
+  grid-template-columns: minmax(0, .88fr) minmax(340px, 1.12fr);
+  gap: clamp(1.5rem, 3vw, 3.5rem);
+  width: 100%;
+  min-height: 0;
+  flex: 1;
+}
+
+.case-study-detail__copy,
+.case-study-gallery {
+  min-width: 0;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-color: rgba(255, 185, 230, .42) transparent;
+  scrollbar-width: thin;
+}
+
+.case-study-detail__copy {
+  display: flex;
+  flex-direction: column;
+  padding: .25rem .65rem 1rem 0;
+}
+
+.project-card.case-study-expanded .case-study-detail h2 {
+  max-width: 15em;
+  color: #fffafb;
+  font-size: clamp(2rem, 3.2vw, 3.35rem);
+  line-height: 1.16;
+}
+
+.project-card.case-study-expanded .case-study-detail__summary {
+  color: #eee9f5;
+  font-size: clamp(.98rem, 1.18vw, 1.12rem);
+  line-height: 1.75;
+}
+
+.project-card.case-study-expanded .case-study-detail ul {
+  gap: .82rem;
+}
+
+.project-card.case-study-expanded .case-study-detail li {
+  color: #ded8e8;
+  font-size: clamp(.83rem, .98vw, .95rem);
+  line-height: 1.7;
+}
+
+.case-study-toolkit {
+  margin-top: 1.5rem;
+}
+
+.case-study-toolkit h3 {
+  margin: 0 0 .8rem;
+  color: #fff8fc;
+  font-family: "LXGW WenKai", "Microsoft YaHei UI", sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: .04em;
+}
+
+.case-study-toolkit__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+}
+
+.case-study-toolkit__list span {
+  padding: .48rem .68rem;
+  border-radius: .45rem;
+  background: #252033;
+  color: #f0eaf6;
+  font-size: .68rem;
+  line-height: 1.35;
+}
+
+.case-study-gallery {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-content: start;
+  gap: .9rem;
+  padding: .1rem .3rem 1rem 0;
+}
+
+.case-study-gallery figure {
+  margin: 0;
+  overflow: hidden;
+  border-radius: .7rem;
+  background: #191521;
+}
+
+.case-study-gallery__primary {
+  grid-column: 1 / -1;
+}
+
+.case-study-gallery img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  object-position: top center;
+  background: #f4f0e7;
+}
+
+.case-study-gallery figure:not(.case-study-gallery__primary) img {
+  aspect-ratio: 4 / 3;
+}
+
+.case-study-gallery figcaption {
+  padding: .72rem .8rem .82rem;
+  color: #d9d2e2;
+  font-size: .7rem;
+  line-height: 1.55;
+}
+
+@media (max-width: 900px) {
+  .project-glow-card.case-study-expanded-shell {
+    width: min(calc(100vw - 2rem), 760px);
+    max-width: calc(100vw - 2rem);
+  }
+
+  .case-study-detail__layout {
+    grid-template-columns: 1fr;
+    overflow-y: auto;
+  }
+
+  .case-study-detail__copy,
+  .case-study-gallery {
+    overflow: visible;
+  }
+
+  .case-study-gallery {
+    grid-template-columns: 1fr;
+  }
+
+  .case-study-gallery__primary {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 560px) {
+  #projectModal {
+    padding: 1rem;
+  }
+
+  .project-glow-card .project-card.case-study-expanded > .project-case-study {
+    padding: 1.2rem;
+  }
+
+  .project-card.case-study-expanded .case-study-detail h2 {
+    max-width: 100%;
+    font-size: clamp(1.75rem, 9vw, 2.4rem);
+    overflow-wrap: anywhere;
+  }
+}
+

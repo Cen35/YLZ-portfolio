@@ -18,6 +18,16 @@ window.YLZ_DEFAULT_PROJECTS = [
       '屏幕截图 2026-09-23 192535.png',
       '屏幕截图 2026-09-23 192510.png'
     ],
+    toolkit: [
+      'HTML5 多页面',
+      'CSS3 手账视觉',
+      '原生 JavaScript',
+      'Supabase · PostgreSQL · RLS',
+      '高德地图 JS API 2.0',
+      'localStorage 本地降级',
+      'Netlify',
+      'Trae / AI 辅助编码'
+    ],
     caseStudy: [
       {
         id: 'outcome',
@@ -31,7 +41,12 @@ window.YLZ_DEFAULT_PROJECTS = [
           '路线规划支持起点与最多 8 个途经点，可选择驾车、公交、步行或骑行。',
           '个人中心集中管理收藏、投稿和评论；弱网时自动读取本地缓存，避免页面清空。'
         ],
-        note: '公开访问 · 45 家真实店铺 · 10 类美食 · 4 种导航方式'
+        note: '公开访问 · 45 家真实店铺 · 10 类美食 · 4 种导航方式',
+        images: [
+          { src: 'assets/case-study/wuzhou/image4.png', alt: '梧州美食网站桌面端双页手账首页', caption: '桌面端首页：今日推荐与 10 类美食目录组成双页手账。' },
+          { src: 'assets/case-study/wuzhou/image2.png', alt: '梧州美食网站移动端地图与店铺标记', caption: '移动端美食地图：店铺标记、搜索、选点添加与路线入口。' },
+          { src: 'assets/case-study/wuzhou/image3.png', alt: '梧州美食网站店铺详情与评论页面', caption: '店铺详情：地址、收藏、美食投稿和评论入口。' }
+        ]
       },
       {
         id: 'solution',
@@ -45,7 +60,11 @@ window.YLZ_DEFAULT_PROJECTS = [
           '云端读取成功后同步写入本地缓存；请求失败时改为读取最近一次成功数据。',
           '最终在弱网与离线场景下仍能展示 45 家店铺，验证“有数据的降级”才是真正降级。'
         ],
-        note: '用户场景 · 本地居民与游客在移动网络中临时查找美食'
+        note: '用户场景 · 本地居民与游客在移动网络中临时查找美食',
+        images: [
+          { src: 'assets/case-study/wuzhou/image9.png', alt: '梧州美食网站数据读取失败提示', caption: '修复前：读取失败后页面回落为空数据，真实店铺无法显示。' },
+          { src: 'assets/case-study/wuzhou/image10.png', alt: '弱网缓存修复后的梧州美食网站首页', caption: '修复后：真实店铺重新出现，首页与目录保持完整。' }
+        ]
       },
       {
         id: 'evidence',
@@ -59,7 +78,12 @@ window.YLZ_DEFAULT_PROJECTS = [
           'AI 对话策略：先写约束再写目标；描述故障时同时提供现象、复现步骤与期望结果。',
           '典型修复证据包括 SVG 动画重叠、云端失败导致空白，以及本地首位用户自动成为管理员的权限漏洞。'
         ],
-        note: '验证方式 · 截图复现、代码定位、移动网络测试、刷新与离线回归'
+        note: '验证方式 · 截图复现、代码定位、移动网络测试、刷新与离线回归',
+        images: [
+          { src: 'assets/case-study/wuzhou/image6.png', alt: '梧州美食网站视觉需求对话记录', caption: '视觉需求：把抽象的“手账感”拆成装订线、贴纸、纸张与标题约束。' },
+          { src: 'assets/case-study/wuzhou/image7.png', alt: '公交路线错误问题的对话与验证记录', caption: 'Bug 复现：明确“选择公交却仍显示骑行”的现象与操作路径。' },
+          { src: 'assets/case-study/wuzhou/image8.png', alt: '管理员权限异常问题的对话记录', caption: '安全问题：根据用户反馈定位旧版本地会话造成的管理员越权。' }
+        ]
       },
       {
         id: 'iterations',
@@ -73,7 +97,11 @@ window.YLZ_DEFAULT_PROJECTS = [
           '2026.09.12–09.14 · V1.5–V2.2：加入防重复、路线、收藏、个人中心、权限安全与移动端优化。',
           '2026.09.29 · V2.3：建立弱网缓存机制，完成移动网络与离线回归。'
         ],
-        note: '当前版本 · V2.3'
+        note: '当前版本 · V2.3',
+        images: [
+          { src: 'assets/case-study/wuzhou/image1.png', alt: '梧州美食网站移动端首页迭代版本', caption: '移动端首页：推荐内容、登录入口与手账式信息层级。' },
+          { src: 'assets/case-study/wuzhou/image10.png', alt: '梧州美食网站当前桌面端版本', caption: '当前桌面端版本：统一目录、个人入口与管理后台。' }
+        ]
       },
       {
         id: 'reflection',
@@ -87,7 +115,11 @@ window.YLZ_DEFAULT_PROJECTS = [
           '能力变化：从反复试错转向理解机制，从独立编码转向记录问题与管理迭代。',
           '下一步：接入 Git 版本管理、建立离线回归清单、用 IndexedDB 缓存图片并尝试 PWA。'
         ],
-        note: '可迁移原则 · 降级方案必须提前准备可用数据'
+        note: '可迁移原则 · 降级方案必须提前准备可用数据',
+        images: [
+          { src: 'assets/case-study/wuzhou/image5.png', alt: 'Supabase 和高德地图配置检查记录', caption: '从“能写功能”走向“会检查配置、权限与部署前提”。' },
+          { src: 'assets/case-study/wuzhou/image4.png', alt: '梧州美食网站完整桌面端成果', caption: '最终成果：把本地内容、地图能力与真实用户数据组合成完整体验。' }
+        ]
       }
     ]
   },
